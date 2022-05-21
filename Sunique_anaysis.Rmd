@@ -16,14 +16,24 @@ data <- read.csv(file = 'combine.csv',na.strings = c("","NA"))
 ```
 
 ```{r}
-#data cleaning (omite 80% of the missing data)
+#data cleaning (omit 90% of the missing data)
 data<-data[, which(colMeans(!is.na(data)) > 0.9)]
 ```
 
 ```{r}
-data = subset(data, select = c(Postal.Code,Subdivision.Name,Street.Name,Street.Number) )
-data <- data[data$Street.Name =="Silvestone"]
+#check status
+table(data$Standard.Status)
+#choose CLS status house
+data_active <-data[data$Standard.Status =="CLS",]
+
+# filter out good area (rent date less than 30/45 days)
+data_rent <-data_active[data_active$Days.On.Market<46,]
+#sort decreasing order
+sort(table(data_rent$Postal.Code), decreasing = TRUE)[1:100]
 ```
 
+```{r}
+#find house less than 5 bed room and 5 bathroom 
+data_rent <-data_rent[data_rent$Bedrooms.Total <5 & data_rent$Bathrooms.Total.Interger <5,]
 
 ```
