@@ -10,9 +10,12 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
+library(ggplot2)
+```
+
+```{r}
 #read data
 data <- read.csv(file = 'combine.csv',na.strings = c("","NA"))
-
 ```
 
 ```{r}
@@ -26,7 +29,15 @@ table(data$Standard.Status)
 #choose CLS status house
 data_active <-data[data$Standard.Status =="CLS",]
 
-# filter out good area (rent date less than 30/45 days)
+#get first letter in for subdivision column
+subdivision_first_letter <- substr(data_rent$Subdivision.Name,1,6)
+#sign into a new columns
+data_rent$subdivision_first_letter <- subdivision_first_letter
+```
+
+2. filter out good house
+```{r}
+# filter out good area (rent date less than 45 days)
 data_rent <-data_active[data_active$Days.On.Market<46,]
 #sort decreasing order
 sort(table(data_rent$Postal.Code), decreasing = TRUE)[1:100]
@@ -34,6 +45,11 @@ sort(table(data_rent$Postal.Code), decreasing = TRUE)[1:100]
 
 ```{r}
 #find house less than 5 bed room and 5 bathroom 
-data_rent <-data_rent[data_rent$Bedrooms.Total <5 & data_rent$Bathrooms.Total.Interger <5,]
+data_rent <-data_rent[data_rent$Bedrooms.Total <4 & data_rent$Bathrooms.Total.Interger <4,]
+```
+
+```{r}
+#year difference
 
 ```
+
