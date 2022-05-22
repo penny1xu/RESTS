@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(ggplot2)
+library(dplyr)
 ```
 
 ```{r}
@@ -50,6 +51,14 @@ data_rent <-data_rent[data_rent$Bedrooms.Total <4 & data_rent$Bathrooms.Total.In
 
 ```{r}
 #year difference
+data_rent<-na.omit(data_rent)
+data_rent[data_rent$Year.Built <= 1990, "Building_Year"]<- "1990-"
+data_rent[data_rent$Year.Built > 1990 & data_rent$Year.Built <= 2011, "Building_Year"] <- "1990-2011"
+data_rent[data_rent$Year.Built > 2011 & data_rent$Year.Built <= 2021, "Building_Year"] <- "2011-2021"
+data_rent[data_rent$Year.Built == 2022 , "Building_Year"] <- "2022"
+```
 
+```{r}
+# graph top 20 zipcode + subdivision seperate in years
 ```
 
