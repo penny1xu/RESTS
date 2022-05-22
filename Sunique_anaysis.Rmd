@@ -19,46 +19,71 @@ library(dplyr)
 data <- read.csv(file = 'combine.csv',na.strings = c("","NA"))
 ```
 
+#big data cleaning 
 ```{r}
 #data cleaning (omit 90% of the missing data)
 data<-data[, which(colMeans(!is.na(data)) > 0.9)]
+
+#get first letter in for subdivision column
+subdivision_first_letter <- substr(data$Subdivision.Name,1,6)
+#sign into a new columns
+data$subdivision_first_letter <- subdivision_first_letter
+
+#year difference
+data<-na.omit(data)
+data[data$Year.Built <= 1990, "Building_Year"]<- "1990-"
+data[data$Year.Built > 1990 & data$Year.Built <= 2011, "Building_Year"] <- "1990-2011"
+data[data$Year.Built > 2011 & data$Year.Built <= 2021, "Building_Year"] <- "2011-2021"
+data[data$Year.Built == 2022 , "Building_Year"] <- "2022"
 ```
 
+# filter out good house
 ```{r}
 #check status
 table(data$Standard.Status)
 #choose CLS status house
 data_active <-data[data$Standard.Status =="CLS",]
 
-#get first letter in for subdivision column
-subdivision_first_letter <- substr(data_rent$Subdivision.Name,1,6)
-#sign into a new columns
-data_rent$subdivision_first_letter <- subdivision_first_letter
-```
-
-2. filter out good house
-```{r}
 # filter out good area (rent date less than 45 days)
 data_rent <-data_active[data_active$Days.On.Market<46,]
 #sort decreasing order
-sort(table(data_rent$Postal.Code), decreasing = TRUE)[1:100]
+sort(table(data_rent$Postal.Code), decreasing = TRUE)[1:20]
 ```
 
 ```{r}
 #find house less than 5 bed room and 5 bathroom 
 data_rent <-data_rent[data_rent$Bedrooms.Total <4 & data_rent$Bathrooms.Total.Interger <4,]
+
 ```
 
 ```{r}
-#year difference
-data_rent<-na.omit(data_rent)
-data_rent[data_rent$Year.Built <= 1990, "Building_Year"]<- "1990-"
-data_rent[data_rent$Year.Built > 1990 & data_rent$Year.Built <= 2011, "Building_Year"] <- "1990-2011"
-data_rent[data_rent$Year.Built > 2011 & data_rent$Year.Built <= 2021, "Building_Year"] <- "2011-2021"
-data_rent[data_rent$Year.Built == 2022 , "Building_Year"] <- "2022"
+# combine bed and bathroom(sort by)
+data_rent$Bedrooms.Total<-as.integer(data_rent$Bedrooms.Total)
+str(data_rent)
+data_group <- data_rent %>%                                 # Group data
+  group_by(Bedrooms.Total,Bathrooms.Total.Interger,subdivision_first_letter) %>%
+  dplyr::summarize(gr_sum = sum(Bedrooms.Total)) %>% 
+  as.data.frame()
+data_group
+#calculate each zip-code/ subdivision + price area mean
+
+
+#each bed and bathroom mean in each area or subdivision
+
+
 ```
 
 ```{r}
-# graph top 20 zipcode + subdivision seperate in years
+```
+
+```{r}
+# how to do subdivision + zipcode
+
+#square feet
+```
+
+```{r}
+# graph top 20 zipcode + subdivision separate in years
+
 ```
 
