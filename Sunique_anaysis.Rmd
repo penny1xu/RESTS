@@ -58,16 +58,15 @@ data_rent <-data_rent[data_rent$Bedrooms.Total <4 & data_rent$Bathrooms.Total.In
 
 ```{r}
 # combine bed and bathroom(sort by)
+
 data_rent$Bedrooms.Total<-as.integer(data_rent$Bedrooms.Total)
 str(data_rent)
 data_group <- data_rent %>%                                 # Group data
-  group_by(Bedrooms.Total,Bathrooms.Total.Interger,subdivision_first_letter) %>%
-  dplyr::summarize(gr_sum = sum(Bedrooms.Total)) %>% 
+  group_by(Postal.Code,Bedrooms.Total,Bathrooms.Total.Interger,subdivision_first_letter) %>%
+  dplyr::summarize(Total = sum(Close.Price)) %>% 
   as.data.frame()
 data_group
 #calculate each zip-code/ subdivision + price area mean
-
-
 #each bed and bathroom mean in each area or subdivision
 
 
