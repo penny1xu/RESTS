@@ -41,35 +41,31 @@ data[data$Year.Built == 2022 , "Building_Year"] <- "2022"
 ```{r}
 #check status
 table(data$Standard.Status)
-#choose CLS status house
-data_active <-data[data$Standard.Status =="CLS",]
+#choose CLS status house / sell / SFR
+data_SELL <-data[data$Standard.Status =="CLS" & data$Property.Type == "RESI" & data$Property.Sub.Type =="SFR",]
 
-# filter out good area (rent date less than 45 days)
-data_rent <-data_active[data_active$Days.On.Market<46,]
+# filter out good area (sold date less than 45 days)
+data_SELL <-data_SELL[data_SELL$Days.On.Market<46,]
 #sort decreasing order
-sort(table(data_rent$Postal.Code), decreasing = TRUE)[1:20]
+sort(table(data_SELL$Postal.Code), decreasing = TRUE)[1:20]
 ```
 
 ```{r}
 #find house less than 5 bed room and 5 bathroom 
-data_rent <-data_rent[data_rent$Bedrooms.Total <4 & data_rent$Bathrooms.Total.Interger <4,]
-
+data_SELL <-data_SELL[data_SELL$Bedrooms.Total <4 & data_SELL$Bathrooms.Total.Decimal<3.5,]
 ```
 
 ```{r}
-# combine bed and bathroom(sort by)
+# sort each columns and find the price
+data_SELL$Close.Price <- as.numeric(data_SELL$Close.Price)
+group_value <-data_SELL %>%
+  group_by(Postal.Code,subdivision_first_letter,Bedrooms.Total,Bathrooms.Total.Decimal) %>%
+  summarise_at(vars(Close.Price,), list(price = mean))
+```
 
-data_rent$Bedrooms.Total<-as.integer(data_rent$Bedrooms.Total)
-str(data_rent)
-data_group <- data_rent %>%                                 # Group data
-  group_by(Postal.Code,Bedrooms.Total,Bathrooms.Total.Interger,subdivision_first_letter) %>%
-  dplyr::summarize(Total = sum(Close.Price)) %>% 
-  as.data.frame()
-data_group
-#calculate each zip-code/ subdivision + price area mean
-#each bed and bathroom mean in each area or subdivision
-
-
+```{r}
+# export to csv
+write.csv(group_value, "sheet.csv")
 ```
 
 ```{r}
