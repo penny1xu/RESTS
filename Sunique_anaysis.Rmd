@@ -66,6 +66,9 @@ data_SELL_1990 <-data_SELL[data_SELL$Building_Year == "1990-",]
 data_SELL_1990 %>%
   group_by(Postal.Code,subdivision_first_letter,Bedrooms.Total,Bathrooms.Total.Decimal) %>%
   summarise_at(vars(Close.Price,), list(price = mean))
+
+# export to csv
+write.csv(group_value, "1990.csv")
 ```
 
 # 1990-2011
@@ -76,6 +79,9 @@ data_SELL_1990_2011 <-data_SELL[data_SELL$Building_Year == "1990-2011",]
 data_SELL_1990_2011 %>%
   group_by(Postal.Code,subdivision_first_letter,Bedrooms.Total,Bathrooms.Total.Decimal) %>%
   summarise_at(vars(Close.Price,), list(price = mean))
+
+# export to csv
+write.csv(group_value, "1990-2011.csv")
 ```
 #2011-2021
 ```{r}
@@ -86,6 +92,8 @@ data_SELL_2011_2021 %>%
   group_by(Postal.Code,subdivision_first_letter,Bedrooms.Total,Bathrooms.Total.Decimal) %>%
   summarise_at(vars(Close.Price,), list(price = mean))
 
+# export to csv
+write.csv(group_value, "2011-2021.csv")
 ```
 # 2022
 ```{r}
@@ -94,13 +102,11 @@ data_SELL_2022 <-data_SELL[data_SELL$Building_Year == "2022",]
 data_SELL_2022 %>%
   group_by(Postal.Code,subdivision_first_letter,Bedrooms.Total,Bathrooms.Total.Decimal) %>%
   summarise_at(vars(Close.Price,), list(price = mean))
-```
 
-
-```{r}
 # export to csv
-write.csv(group_value, "house sold sheet.csv")
+write.csv(group_value, "2022.csv")
 ```
+
 
 ```{r}
 # 
@@ -110,7 +116,12 @@ write.csv(group_value, "house sold sheet.csv")
 ```
 
 ```{r}
-# graph top 20 zipcode + subdivision separate in years
+# previece listing value
+# row column NA previes 的删掉
+# previece - close price 
+
+# 百分比算出来
+
 
 ```
 
