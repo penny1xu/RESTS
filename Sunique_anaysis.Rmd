@@ -78,7 +78,7 @@ data_SELL_1990_2011 <-data_SELL[data_SELL$Building_Year == "1990-2011",]
 #group by year house price  1990-2011 , 
 group_value <- data_SELL_1990_2011 %>%
   group_by(Postal.Code,subdivision_first_letter,Bedrooms.Total,Bathrooms.Total.Decimal) %>%
-  summarise_at(vars(Close.Price,), list(price = mean))
+  summarise(Mean = mean(Close.Price), count_sales = n())
 
 # export to csv
 write.csv(group_value, "1990-2011.csv")
@@ -90,7 +90,7 @@ data_SELL_2011_2021 <-data_SELL[data_SELL$Building_Year == "2011-2021",]
 #group by year house price  1990-2011 , 
 data_SELL_2011_2021 %>%
   group_by(Postal.Code,subdivision_first_letter,Bedrooms.Total,Bathrooms.Total.Decimal) %>%
-  summarise_at(vars(Close.Price,), list(price = mean))
+  summarise(Mean = mean(Close.Price), count_sales = n())
 
 # export to csv
 write.csv(group_value, "2011-2021.csv")
@@ -101,7 +101,7 @@ data_SELL_2022 <-data_SELL[data_SELL$Building_Year == "2022",]
 #group by year house price 2022 , 
 group_value<-data_SELL_2022 %>%
   group_by(Postal.Code,subdivision_first_letter,Bedrooms.Total,Bathrooms.Total.Decimal) %>%
-  summarise_at(vars(Close.Price,), list(price = mean))
+  summarise(Mean = mean(Close.Price), count_sales = n())
 
 # export to csv
 write.csv(group_value, "2022.csv")
