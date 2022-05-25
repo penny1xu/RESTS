@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(ggplot2)
 library(dplyr)
+library(arsenal)
 ```
 # analyze close status house
 ```{r}
@@ -65,10 +66,20 @@ data_SELL_1990 <-data_SELL[data_SELL$Building_Year == "1990-",]
 #group by year house price  1990- , 
 group_value<- data_SELL_1990 %>%
   group_by(Postal.Code,subdivision_first_letter,Bedrooms.Total,Bathrooms.Total.Decimal) %>%
-  summarise(Mean = mean(Close.Price), count_sales = n())
+  summarise(Mean = mean(Close.Price), count = n())
 
 # export to csv
 write.csv(group_value, "1990.csv")
+```
+```{r}
+#rename 1990
+
+group_value <-group_value %>% 
+  rename(
+    PostalCode = Postal.Code,
+    BedroomsTotal = Bedrooms.Total,
+    BathroomsTotalDecimal =Bathrooms.Total.Decimal
+    )
 ```
 
 # 1990-2011
@@ -116,7 +127,7 @@ data_ACT <- read.csv(file = 'Total_Result.csv',na.strings = c("","NA"))
 # clean subdivision NA value
 
 ```
-
+#data clean
 ```{r}
 
 #data_ACT<-data_ACT[, which(colMeans(!is.na(data_ACT)) > 0.6)]
@@ -145,20 +156,24 @@ data_ACT[data_ACT$YearBuilt > 2011 & data_ACT$YearBuilt <= 2021, "Building_Year"
 data_ACT[data_ACT$YearBuilt == 2022 , "Building_Year"] <- "2022"
 ```
 
-# active 房价做对比
+# active 房价做对比 1990-
 ```{r}
 data_ACT_1990 <-data_ACT[data_ACT$Building_Year == "1990-",]
 
 # 每个subdivision 区 active - close 区 
-data_ACT_1990 %>%
+data_1<- data_ACT_1990 %>%
   group_by(PostalCode,subdivision_first_letter,BedroomsTotal,BathroomsTotalDecimal) %>%
-  summarise(Mean = mean(ListPrice), count = n())
+  summarise(List_Price = mean(ListPrice), count = n())
 
+data_1 <- data.frame(lapply(data_1, as.character))
 #output 差价
 ```
 
 ```{r}
-# 怎么评估卖多少钱
+df <- data.frame()
+# 加上特定前50 区域 + 价格差价
+df <- inner_join(group_value,data_1, by = c("PostalCode","subdivision_first_letter","BedroomsTotal"))
+
 ```
 
 
