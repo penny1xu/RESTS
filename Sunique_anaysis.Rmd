@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(dplyr)
 ```
-
+# analyze close status house
 ```{r}
 #read data
 data <- read.csv(file = 'combine.csv',na.strings = c("","NA"))
@@ -108,22 +108,55 @@ write.csv(group_value, "2022.csv")
 ```
 
 
-```{r}
-# 算每个区房子差价 sqft 差价 output max
 
+# Active status house
+```{r}
+#read data
+data_ACT <- read.csv(file = 'Total_Result.csv',na.strings = c("","NA"))
 ```
 
 ```{r}
+# omit na columns
+data_ACT<-data_ACT[, which(colMeans(!is.na(data_ACT)) > 0.8)]
+
+#sign into a new columns
+data_ACT$subdivision_first_letter <- NA
+#get first letter in for subdivision column
+subdivision_first_letter <- substr(data_ACT$SubdivisionName,1,6)
+# sign subdivision to it
+data_ACT$subdivision_first_letter <- subdivision_first_letter
+
+#choose needed column 
+data_ACT <-data_ACT[data_ACT$PropertyType == "Residential" &
+                      data_ACT$PropertySubType =="Single Family Residence",]
+
+```
+# sign different year
+```{r}
+#year difference
+data_ACT$Building_Year <- NA
+data_ACT[data_ACT$Year.Built <= 1990, "Building_Year"]<- "1990-"
+data_ACT[data_ACT$Year.Built > 1990 & data_ACT$Year.Built <= 2011, "Building_Year"] <- "1990-2011"
+data_ACT[data_ACT$Year.Built > 2011 & data_ACT$Year.Built <= 2021, "Building_Year"] <- "2011-2021"
+data_ACT[data_ACT$Year.Built == 2022 , "Building_Year"] <- "2022"
+```
+
+# active 房价做对比
+```{r}
+
+data_ACT_1990 <-data_ACT[data_ACT$Building_Year == "1990-",]
+
+# 每个subdivision 区 active - close 区 
+data_ACT_1990 %>%
+  group_by(Postal.Code,subdivision_first_letter,Bedrooms.Total,Bathrooms.Total.Decimal) %>%
+  summarise(Mean = mean(Close.Price), count_sales = n())
+
+#output 差价
 ```
 
 ```{r}
-# previece listing value 算一个片区的 mean
-
-# previece - close price 
-
-# 百分比算出来
-
-# 百分比最高的区域 + zip 卖出的最多的区域
+# 怎么评估卖多少钱
+```
 
 
 ```
