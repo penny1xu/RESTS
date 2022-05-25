@@ -46,6 +46,9 @@ data_SELL <-data[data$Standard.Status =="CLS" & data$Property.Type == "RESI" & d
 
 # filter out good area (sold date less than 45 days)
 data_SELL <-data_SELL[data_SELL$Days.On.Market<46,]
+#set numerical
+data_SELL$Close.Price <- as.numeric(data_SELL$Close.Price)
+
 #sort decreasing order
 sort(table(data_SELL$Postal.Code), decreasing = TRUE)[1:20]
 ```
@@ -55,26 +58,55 @@ sort(table(data_SELL$Postal.Code), decreasing = TRUE)[1:20]
 data_SELL <-data_SELL[data_SELL$Bedrooms.Total <4 & data_SELL$Bathrooms.Total.Decimal<3.5,]
 ```
 
+# 1990 house
 ```{r}
-# sort each columns and find the price
-data_SELL$Close.Price <- as.numeric(data_SELL$Close.Price)
-group_value <-data_SELL %>%
+#filter out year 1990
+data_SELL_1990 <-data_SELL[data_SELL$Building_Year == "1990-",]
+#group by year house price  1990- , 
+data_SELL_1990 %>%
   group_by(Postal.Code,subdivision_first_letter,Bedrooms.Total,Bathrooms.Total.Decimal) %>%
   summarise_at(vars(Close.Price,), list(price = mean))
 ```
 
+# 1990-2011
+```{r}
+#filter out year 1990-2011
+data_SELL_1990_2011 <-data_SELL[data_SELL$Building_Year == "1990-2011",]
+#group by year house price  1990-2011 , 
+data_SELL_1990_2011 %>%
+  group_by(Postal.Code,subdivision_first_letter,Bedrooms.Total,Bathrooms.Total.Decimal) %>%
+  summarise_at(vars(Close.Price,), list(price = mean))
+```
+#2011-2021
+```{r}
+#filter out year 1990-2011
+data_SELL_2011_2021 <-data_SELL[data_SELL$Building_Year == "2011-2021",]
+#group by year house price  1990-2011 , 
+data_SELL_2011_2021 %>%
+  group_by(Postal.Code,subdivision_first_letter,Bedrooms.Total,Bathrooms.Total.Decimal) %>%
+  summarise_at(vars(Close.Price,), list(price = mean))
+
+```
+# 2022
+```{r}
+data_SELL_2022 <-data_SELL[data_SELL$Building_Year == "2022",]
+#group by year house price 2022 , 
+data_SELL_2022 %>%
+  group_by(Postal.Code,subdivision_first_letter,Bedrooms.Total,Bathrooms.Total.Decimal) %>%
+  summarise_at(vars(Close.Price,), list(price = mean))
+```
+
+
 ```{r}
 # export to csv
-write.csv(group_value, "sheet.csv")
+write.csv(group_value, "house sold sheet.csv")
 ```
 
 ```{r}
+# 
 ```
 
 ```{r}
-# how to do subdivision + zipcode
-
-#square feet
 ```
 
 ```{r}
