@@ -113,22 +113,20 @@ write.csv(group_value, "2022.csv")
 ```{r}
 #read data
 data_ACT <- read.csv(file = 'Total_Result.csv',na.strings = c("","NA"))
-
+# clean subdivision NA value
 
 ```
 
 ```{r}
-# omit na columns
+
 #data_ACT<-data_ACT[, which(colMeans(!is.na(data_ACT)) > 0.6)]
 data_ACT <-data_ACT[data_ACT$BedroomsTotal <4 & data_ACT$BathroomsTotalDecimal<3.5,]
-
-
-#sign into a new columns
 
 #get first letter in for subdivision column
 subdivision_first_letter <- substr(data_ACT$SubdivisionName,1,6)
 # sign subdivision to it
 data_ACT$subdivision_first_letter <- subdivision_first_letter
+
 
 #choose needed column 
 data_ACT <-data_ACT[data_ACT$PropertyType == "Residential" &
@@ -137,8 +135,10 @@ data_ACT <-data_ACT[data_ACT$PropertyType == "Residential" &
 ```
 # sign different year
 ```{r}
+# omit na columns
+data_ACT <- data_ACT[!is.na(data_ACT$YearBuilt),]
+
 #year difference
-data_ACT$Building_Year <- NA
 data_ACT[data_ACT$YearBuilt <= 1990, "Building_Year"]<- "1990-"
 data_ACT[data_ACT$YearBuilt > 1990 & data_ACT$YearBuilt <= 2011, "Building_Year"] <- "1990-2011"
 data_ACT[data_ACT$YearBuilt > 2011 & data_ACT$YearBuilt <= 2021, "Building_Year"] <- "2011-2021"
@@ -147,13 +147,12 @@ data_ACT[data_ACT$YearBuilt == 2022 , "Building_Year"] <- "2022"
 
 # active 房价做对比
 ```{r}
-
 data_ACT_1990 <-data_ACT[data_ACT$Building_Year == "1990-",]
 
 # 每个subdivision 区 active - close 区 
 data_ACT_1990 %>%
   group_by(PostalCode,subdivision_first_letter,BedroomsTotal,BathroomsTotalDecimal) %>%
-  summarise(Mean = mean(ClosePrice), sales = n())
+  summarise(Mean = mean(ListPrice), count = n())
 
 #output 差价
 ```
