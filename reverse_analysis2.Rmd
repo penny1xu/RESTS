@@ -1,0 +1,59 @@
+---
+title: "reverse_analysis2"
+author: "Yeyun Xu"
+date: "5/27/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#read data
+data2 <- read.csv(file = 'combine.csv',na.strings = c("","NA"))
+```
+
+```{r}
+#data cleaning (omit 90% of the missing data)
+data2<-data2[, which(colMeans(!is.na(data2)) > 0.8)]
+
+data2 <-data2[data$Property.Type == "RESI" &
+                      data$Property.Sub.Type =="SFR",]
+```
+
+
+```{r}
+data2 <- data2[!is.na(data2$Year.Built),]
+data2[data2$Year.Built <= 1990, "Building_Year"]<- "1990-"
+data2[data2$Year.Built > 1990 & data2$Year.Built <= 2011, "Building_Year"] <- "1990-2011"
+data2[data2$Year.Built > 2011 & data2$Year.Built <= 2021, "Building_Year"] <- "2011-2021"
+data2[data2$Year.Built == 2022 , "Building_Year"] <- "2022"
+```
+
+
+```{r}
+data_postcode2 <- data2[data2$Postal.Code == "75006" ,]
+#Longitude
+data_postcode2$Longitude <- as.numeric(as.character(data_postcode2$Longitude))
+
+#96.871856 -0.15
+data_postcode2<- data_postcode2 %>%
+  filter(Longitude > (-96.871856 -0.02) & Longitude < (-96.861856 + 0.02))
+
+#Latitude 
+data_postcode2$Latitude <- as.numeric(as.character(data_postcode2$Latitude))
+
+#32.948805 - 0.015
+data_postcode2<- data_postcode2 %>%
+  filter(Latitude > (32.948805 - 0.02) & Latitude < (32.948805 + 0.02))
+# sqrFt 2126 - 200
+data_postcode2 <- data_postcode2 %>%
+  filter(Living.Area < (2126 +100) & Living.Area > (2126 -100))
+
+data_postcode2$Close.Price <- as.numeric(as.character(data_postcode2$Close.Price))
+mean(data_postcode2$Close.Price)
+
+#write.csv(data_postcode, "house.csv")
+
+```
