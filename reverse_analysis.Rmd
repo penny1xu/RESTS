@@ -1,0 +1,41 @@
+---
+title: "reversie_analysis"
+author: "Yeyun Xu"
+date: "5/26/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#read data
+data <- read.csv(file = 'combine.csv',na.strings = c("","NA"))
+```
+
+```{r}
+#data cleaning (omit 90% of the missing data)
+data<-data[, which(colMeans(!is.na(data)) > 0.8)]
+
+#get first letter in for subdivision column
+subdivision_first_letter <- substr(data$Subdivision.Name,1,6)
+#sign into a new columns
+data$subdivision_first_letter <- subdivision_first_letter
+
+```
+
+```{r}
+data <- data[!is.na(data$Year.Built),]
+data[data$Year.Built <= 1990, "Building_Year"]<- "1990-"
+data[data$Year.Built > 1990 & data$Year.Built <= 2011, "Building_Year"] <- "1990-2011"
+data[data$Year.Built > 2011 & data$Year.Built <= 2021, "Building_Year"] <- "2011-2021"
+data[data$Year.Built == 2022 , "Building_Year"] <- "2022"
+```
+
+```{r}
+ year <- readline(prompt="Enter years: ")
+ zip <- readline(prompt="Enter zip code: ")
+
+
+```

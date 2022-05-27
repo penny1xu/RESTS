@@ -173,6 +173,7 @@ data_1 <- data.frame(lapply(data_1, as.character))
 df <- data.frame()
 # 加上特定前50 区域 + 价格差价
 df <- inner_join(group_value,data_1, by = c("PostalCode","subdivision_first_letter","BedroomsTotal"))
+write.csv(df, "compare.csv")
 
 ```
 
