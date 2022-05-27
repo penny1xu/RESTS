@@ -18,6 +18,10 @@ data <- read.csv(file = 'combine.csv',na.strings = c("","NA"))
 #data cleaning (omit 90% of the missing data)
 data<-data[, which(colMeans(!is.na(data)) > 0.8)]
 
+data <-data[data$Property.Type == "RESI" &
+                      data$Property.Sub.Type =="SFR",]
+
+
 #get first letter in for subdivision column
 subdivision_first_letter <- substr(data$Subdivision.Name,1,6)
 #sign into a new columns
@@ -32,10 +36,25 @@ data[data$Year.Built > 1990 & data$Year.Built <= 2011, "Building_Year"] <- "1990
 data[data$Year.Built > 2011 & data$Year.Built <= 2021, "Building_Year"] <- "2011-2021"
 data[data$Year.Built == 2022 , "Building_Year"] <- "2022"
 ```
+#input
+```{r}
+# year <- readline(prompt="Enter years: ")
+#zip <- readline(prompt="Enter zip code: ")
+```
 
 ```{r}
- year <- readline(prompt="Enter years: ")
- zip <- readline(prompt="Enter zip code: ")
+data_postcode <- data[data$Postal.Code == "76112" ,]
+#Longitude
+data_postcode<- data_postcode %>%
+  filter(Longitude > -97.211434 & Longitude < -97.311434 )
 
+#Latitude
+data_postcode<- data_postcode %>%
+  filter(Latitude >32.743529 & Latitude<32.843529)
+# sqrFt
+data_postcode <- data_postcode %>%
+  filter(Living.Area < 1800 & Living.Area > 1400)
 
+data_postcode$Close.Price <- as.numeric(as.character(data_postcode$Close.Price))
+mean(data_postcode$Close.Price)
 ```
