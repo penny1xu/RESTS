@@ -92,7 +92,7 @@ group_value <- data_SELL_1990_2011 %>%
   summarise(Mean = mean(Close.Price), count_sales = n())
 
 # export to csv
-write.csv(group_value, "1990-2011.csv")
+#write.csv(group_value, "1990-2011.csv")
 ```
 #2011-2021
 ```{r}

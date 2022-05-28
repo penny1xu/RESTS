@@ -2,7 +2,10 @@
 title: "reversie_analysis"
 author: "Yeyun Xu"
 date: "5/26/2022"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -41,8 +44,9 @@ data[data$Year.Built == 2022 , "Building_Year"] <- "2022"
 # year <- readline(prompt="Enter years: ")
 #zip <- readline(prompt="Enter zip code: ")
 ```
-
+#76112
 ```{r}
+
 data_postcode <- data[data$Postal.Code == "76112" ,]
 #Longitude
 data_postcode$Longitude <- as.numeric(as.character(data_postcode$Longitude))
@@ -63,6 +67,7 @@ data_postcode <- data_postcode %>%
 
 data_postcode$Close.Price <- as.numeric(as.character(data_postcode$Close.Price))
 mean(data_postcode$Close.Price)
+
 
 #write.csv(data_postcode, "house.csv")
 

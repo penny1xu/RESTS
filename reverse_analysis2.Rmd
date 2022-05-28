@@ -18,8 +18,8 @@ data2 <- read.csv(file = 'combine.csv',na.strings = c("","NA"))
 #data cleaning (omit 90% of the missing data)
 data2<-data2[, which(colMeans(!is.na(data2)) > 0.8)]
 
-data2 <-data2[data$Property.Type == "RESI" &
-                      data$Property.Sub.Type =="SFR",]
+data2 <-data2[data2$Property.Type == "RESI" &
+                      data2$Property.Sub.Type =="SFR" & data2$Standard.Status =="CLS",]
 ```
 
 
@@ -31,20 +31,20 @@ data2[data2$Year.Built > 2011 & data2$Year.Built <= 2021, "Building_Year"] <- "2
 data2[data2$Year.Built == 2022 , "Building_Year"] <- "2022"
 ```
 
-
+# 75006
 ```{r}
 data_postcode2 <- data2[data2$Postal.Code == "75006" ,]
 #Longitude
 data_postcode2$Longitude <- as.numeric(as.character(data_postcode2$Longitude))
 
-#96.871856 -0.15
+#96.871856 -0.02
 data_postcode2<- data_postcode2 %>%
   filter(Longitude > (-96.871856 -0.02) & Longitude < (-96.861856 + 0.02))
 
 #Latitude 
 data_postcode2$Latitude <- as.numeric(as.character(data_postcode2$Latitude))
 
-#32.948805 - 0.015
+#32.948805 - 0.02
 data_postcode2<- data_postcode2 %>%
   filter(Latitude > (32.948805 - 0.02) & Latitude < (32.948805 + 0.02))
 # sqrFt 2126 - 200
@@ -57,3 +57,60 @@ mean(data_postcode2$Close.Price)
 #write.csv(data_postcode, "house.csv")
 
 ```
+
+# 75227
+```{r}
+data_postcode2 <- data2[data2$Postal.Code == "75227" ,]
+
+#Longitude
+data_postcode2$Longitude <- as.numeric(as.character(data_postcode2$Longitude))
+
+#96.673703 -0.01
+data_postcode2<- data_postcode2 %>%
+  filter(Longitude > (-96.673703 -0.01) & Longitude < (-96.673703 + 0.01))
+
+#Latitude 
+data_postcode2$Latitude <- as.numeric(as.character(data_postcode2$Latitude))
+
+#32.750051 - 0.01
+data_postcode2<- data_postcode2 %>%
+  filter(Latitude > (32.750051 - 0.01) & Latitude < (32.750051 + 0.01))
+# sqrFt 1498 - 100
+data_postcode2 <- data_postcode2 %>%
+  filter(Living.Area < (1498 +100) & Living.Area > (1498 -100))
+
+data_postcode2$Close.Price <- as.numeric(as.character(data_postcode2$Close.Price))
+mean(data_postcode2$Close.Price)
+
+#write.csv(data_postcode, "house.csv")
+
+```
+
+# 75081
+```{r}
+data_postcode2 <- data2[data2$Postal.Code == "75081" ,]
+
+#Longitude
+data_postcode2$Longitude <- as.numeric(as.character(data_postcode2$Longitude))
+
+#96.673703 -0.01
+data_postcode2<- data_postcode2 %>%
+  filter(Longitude > (-96.673703 -0.01) & Longitude < (-96.673703 + 0.01))
+
+#Latitude 
+data_postcode2$Latitude <- as.numeric(as.character(data_postcode2$Latitude))
+
+#32.750051 - 0.01
+data_postcode2<- data_postcode2 %>%
+  filter(Latitude > (32.750051 - 0.01) & Latitude < (32.750051 + 0.01))
+# sqrFt 1498 - 100
+data_postcode2 <- data_postcode2 %>%
+  filter(Living.Area < (1498 +100) & Living.Area > (1498 -100))
+
+data_postcode2$Close.Price <- as.numeric(as.character(data_postcode2$Close.Price))
+mean(data_postcode2$Close.Price)
+
+#write.csv(data_postcode, "house.csv")
+
+```
+
