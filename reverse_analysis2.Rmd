@@ -39,7 +39,7 @@ data_postcode2$Longitude <- as.numeric(as.character(data_postcode2$Longitude))
 
 #96.871856 -0.02
 data_postcode2<- data_postcode2 %>%
-  filter(Longitude > (-96.871856 -0.02) & Longitude < (-96.861856 + 0.02))
+  filter(Longitude > (-96.871856 - 0.02) & Longitude < (-96.861856 + 0.02))
 
 #Latitude 
 data_postcode2$Latitude <- as.numeric(as.character(data_postcode2$Latitude))
@@ -54,7 +54,7 @@ data_postcode2 <- data_postcode2 %>%
 data_postcode2$Close.Price <- as.numeric(as.character(data_postcode2$Close.Price))
 mean(data_postcode2$Close.Price)
 
-#write.csv(data_postcode, "house.csv")
+#write.csv(data_postcode, "75006.csv")
 
 ```
 
@@ -82,7 +82,7 @@ data_postcode2 <- data_postcode2 %>%
 data_postcode2$Close.Price <- as.numeric(as.character(data_postcode2$Close.Price))
 mean(data_postcode2$Close.Price)
 
-#write.csv(data_postcode, "house.csv")
+#write.csv(data_postcode, "75227.csv")
 
 ```
 
